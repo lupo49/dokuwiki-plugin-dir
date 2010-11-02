@@ -1,6 +1,7 @@
+# General Plugin Info do not edit
 base   dir
 author Jacobus Geluk
-email  Jacobus [dot] Geluk [at] gmail [dot] com
+email  Jacobus.Geluk@gmail.com
 date   2008-06-28
 name   dir
 desc   Show content of current namespace, including sub namespaces and/or parent/sibling namespaces, in a table or list.
