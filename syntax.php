@@ -13,6 +13,7 @@
  * - Jean-Philippe Prade
  * - Gunther Hartmann
  * - Sebastian Menge
+ * - Matthias Schulte
  */
 
 if (! defined ('DOKU_INC')) {
@@ -83,7 +84,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
       'date'   => '2008-06-28',
       'name'   => 'Dir Plugin',
       'desc'   => 'Shows pages in one or namespaces in a table or list',
-      'url'    => 'http://wiki.splitbrain.org/plugin:dir',
+      'url'    => 'http://www.dokuwiki.org/plugin:dir',
     ) ;
   }
  
@@ -1051,8 +1052,11 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
       $this->rdr->tabular_close () ;
       return ;
     }
-      
-    $this->rdr->table_close () ;
+    
+    $this->_put (DOKU_LF . '</table>' . DOKU_LF) ;
+
+    // Removed table_close() because it add's a </div> too much
+    // $this->rdr->table_close () ;
   }
   
   /**
