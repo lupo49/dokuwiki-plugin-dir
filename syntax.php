@@ -207,13 +207,13 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
       }
       return ;
     }
-    
+         
     $this->_putNewLine () ;
     
     switch ($this->rdrMode) {
     case 'xhtml':
       $this->_put (DOKU_LF . "<span style=\"color:red;\">~~") ;
-      $this->_put (DIR_PLUGIN_PATTERN . "~~: " . $msg . "</span>") ;
+      $this->_put (DIR_PLUGIN_PATTERN . "~~: " . hsc($msg) . "</span>") ;
       break ;
     case 'latex':
       $this->_put (DOKU_LF . "~~") ;
@@ -410,7 +410,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
     } else {
       $this->cols = Array ("page") ;
     }
-  
+     
     if (count ($this->cols) == 0) {
       $cols [] = "page" ;
       $cols [] = "desc" ;
@@ -674,7 +674,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
     $flags = trim ($data, '~') ;
     $flags = substr ($flags, strlen (DIR_PLUGIN_PATTERN)) ;
     $flags = trim ($flags) ;
-    
+        
     $this->_showDebugMsg ("specified arguments=" . $flags) ;
     
     if (
@@ -1289,10 +1289,10 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
   
     if ($data == NULL || $data == '')
       return ;
-    
+             
     switch ($this->rdrMode) {
     case 'xhtml':
-      $this->rdr->doc .= $data ;
+      $this->rdr->doc .= $data;
       break ;
     case 'latex':
       $this->rdr->put ($data) ;
