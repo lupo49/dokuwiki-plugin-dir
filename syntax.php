@@ -290,16 +290,20 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
    * Get the namespace of the parent directory
    * (always prefixed and postfixed with a colon, root is ':')
    */
-  function _getParentNS () {
+  function _getParentNS ($id) {
     
-    global $ID ;
+    // global $ID ;
     
-    $curNS = getNS ($ID) ;
+    $curNS = getNS ($id) ;
     
     if ($curNS == '')
       return ':' ;
     
-    return ':' . $curNS . ':' ;
+    if (substr ($curNS, 0, 1) != ':') {
+      $curNS = ':' . $curNS;
+    }
+
+    return $curNS . ':' ;
   }
    
   /**
@@ -315,9 +319,9 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
     if (substr ($ns, 0, 2) == '.:') {
       $ns = ':' . getNS ($ID) . substr ($ns, 1) ;
     } elseif (substr ($ns, 0, 3) == '..:') {
-      $ns = $this->_getParentNS () . substr ($ns, 3) ;
+      $ns = $this->_getParentNS ($ID) . substr ($ns, 3) ;
     } elseif ($ns == '..') {
-      $ns = $this->_getParentNS () ;
+      $ns = $this->_getParentNS ($ID) ;
     } elseif (substr ($ns, 0, 1) == ':') {
     } elseif ($ns == '.' || $ns == '*') {
       $ns = ':' . getNS ($ID) ;
