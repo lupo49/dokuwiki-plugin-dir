@@ -364,12 +364,14 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
       $tmp = split ("=", $par) ;
       $key = $tmp [0] ;
       $val = $tmp [1] ;
-      switch ($key) {      case "skip":
+      switch ($key) {
+      case "skip":
       case "cols":
       case "hdrs":
       case "sort":
       case "tag":
-        $val = split (';', trim ($val, ';')) ;        break ;
+        $val = split (';', trim ($val, ';')) ;
+        break ;
       case "noheader":
       case "nohead":
       case "nohdr":
@@ -405,7 +407,8 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
         $this->style = "list" ;
         break ;
       case "debug":
-        $this->debug = true ;      }
+        $this->debug = true ;
+      }
       $this->opts [$key] = $val;
     }
   }   
