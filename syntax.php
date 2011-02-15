@@ -355,6 +355,8 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
     
     $this->opts = array () ;
     $this->opts ["noheader"] = false ;
+    $this->opts ["collapse"] = false ;
+    $this->opts ["ego"] = false ;
     
     $flags = split ('\&', $flags) ;
     
@@ -378,6 +380,14 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
       case "header":
         $key = "noheader" ;
         $val = false ;   
+        break ;
+      case "collapse":
+        $key = "collapse" ;
+        $val = true ;   
+        break ;
+      case "ego":
+        $key = "ego" ;
+        $val = true ;   
         break ;
       case "nodefaulttitle":
       case "ndt":
@@ -580,7 +590,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
     // 
     switch ($type) {
     case "f":
-      if ($fqid == ':' . $ID) // If we found ourself, skip it
+      if (($fqid == ':' . $ID) && ! $this->opts ["ego"]) // If we found ourself, skip it
         return false ;
       $pageName = noNS ($id) ;
       if ($pageName == $this->start)
@@ -597,6 +607,13 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
           }
         }
       }
+      if ( $this->opts ["collapse"] ) {
+        // With collapse, only show:
+        // - pages within the same namespace as the current page
+        if ( $this->_getParentNS($fqid) != $this->_getParentNS($ID) ) {
+          return false ;
+        }
+      }
       $linkid = $fqid ;
       break ;
     case "d":
@@ -607,7 +624,37 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
           return false ;
         }
       }
+      if ( $this->opts ["collapse"] ) {
+        // With collapse, only show:
+        // - sibling namespaces of the current namespace and it's ancestors
+        $curPathSplit = split (":", trim (getNS($ID), ":")) ;
+        $fqidPathSplit = split (":", trim (getNS($fqid), ":")) ;
+
+        // Find the last parent namespace that matches
+        // If there is only one more child namespace in the namespace under evaluation,
+        // Then this is a sibling of one of the parent namespaces of the current page.
+        // Siblings are ok, grandchild namespaces and below should be skipped (for collapse).
+        $clevel = 0 ;
+        if (count ($curPathSplit) > 0) {
+          while (($clevel < count($fqidPathSplit) - 1) && ($clevel < count($curPathSplit))) {
+            if ($curPathSplit[$clevel] == $fqidPathSplit[$clevel]) {
+              $clevel++ ;
+            } else {
+              break ;
+            }
+          }
+        }
+        if (count($fqidPathSplit) > $clevel + 1) {
+          return false;
+        }
+      }
+
       $linkid = $fqid . $this->start ;
+
+      // Don't add startpages the user isn't authorized to read
+      if (auth_quickaclcheck (substr($linkid,1)) < AUTH_READ)
+        return false ;
+
       break ;
     }
 
