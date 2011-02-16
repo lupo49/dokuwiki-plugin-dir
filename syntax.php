@@ -14,6 +14,7 @@
  * - Gunther Hartmann
  * - Sebastian Menge
  * - Matthias Schulte
+ * - Geert Janssens
  */
 
 if (! defined ('DOKU_INC')) {
@@ -631,6 +632,11 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
           return false ;
         }
       }
+
+      // Don't add startpages the user isn't authorized to read
+      if (auth_quickaclcheck (substr($linkid,1)) < AUTH_READ)
+        return false ;
+
       if ( $this->opts ["collapse"] ) {
         // With collapse, only show:
         // - sibling namespaces of the current namespace and it's ancestors
@@ -657,11 +663,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
       }
 
       $linkid = $fqid . $this->start ;
-
-      // Don't add startpages the user isn't authorized to read
-      if (auth_quickaclcheck (substr($linkid,1)) < AUTH_READ)
-        return false ;
-
       break ;
     }
 
@@ -983,13 +984,19 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
       $key1 == "date" && 
       $key2 == "modified" &&
       ! isset ($page ["meta"]["date"]["modified"])
-    ) {      $key2 = "created" ;    }    //
+    ) {
+      $key2 = "created" ;
+    }
+    //
     // Return "creator" if "contributor" is null
     //
     if (
       $key1 == "contributor" &&
       ! isset ($page ["meta"]["contributor"])
-    ) {      $key1 = "creator" ;    }   
+    ) {
+      $key1 = "creator" ;
+    }
+   
     if (is_string ($key2))
       return $page ["meta"] [$key1] [$key2] ;
       
