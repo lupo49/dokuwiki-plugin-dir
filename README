@@ -6,6 +6,9 @@ All documentation for the Dir Plugin is available online at:
 
 This plugin requires DokuWiki 2007-06-26 or later.
 
+This version of Dir Plugin is modified to accept the argument namespacename
+to show the namespaces name instead of just "start".
+
 There's a Google Groups mailing list to discuss all issues:
 http://groups.google.com/group/dokuwiki-plugin-dir (outdated)
 

@@ -362,6 +362,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
     $this->opts ["noheader"] = false ;
     $this->opts ["collapse"] = false ;
     $this->opts ["ego"] = false ;
+    $this->opts ["namespacename"] = false ;
     
     $flags = split ('\&', $flags) ;
     
@@ -410,6 +411,10 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
         break ;
       case "list":
         $this->style = "list" ;
+        break ;
+      case "namespacename":
+        $key = "namespacename" ;
+        $val = true ;   
         break ;
       case "debug":
         $this->debug = true ;
@@ -945,8 +950,13 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
     $pageid      = $fqid ;
     $name        = NULL ;
 
-    if ($page ["type"] == 'd')
+    if ($page ["type"] == 'd') {
+      if($this->opts ["namespacename"]) {
+        $pieces = explode(':',trim($pageid,':'));
+        $name =  array_pop($pieces);
+      }
       $pageid .= ':' . $this->start ;
+    }
    
     if (! $this->useDefaultTitle) {
       $name = split (':', $fqid) ;
