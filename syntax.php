@@ -254,7 +254,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
     if (! $plug)
       return 'Plugin $plugin not loaded!' ;
         
-    $html = $plug->td ($id) ;
+    $html = $plug->td (cleanID($id)) ;
     
     return $html ;
   }
