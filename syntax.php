@@ -364,10 +364,10 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
     $this->opts ["ego"] = false ;
     $this->opts ["namespacename"] = false ;
     
-    $flags = split ('\&', $flags) ;
+    $flags = explode('\&', $flags) ;
     
     foreach ($flags as $index => $par) {
-      $tmp = split ("=", $par) ;
+      $tmp = explode("=", $par) ;
       $key = $tmp [0] ;
       $val = $tmp [1] ;
       switch ($key) {
@@ -376,7 +376,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
       case "hdrs":
       case "sort":
       case "tag":
-        $val = split (';', trim ($val, ';')) ;
+        $val = explode(';', trim($val, ';')) ;
         break ;
       case "noheader":
       case "nohead":
@@ -523,7 +523,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
     
     foreach ($this->sortKeys as $index => $sortKey) {
     
-      $array = split ('-', strtolower ($sortKey)) ;
+      $array = explode('-', strtolower ($sortKey)) ;
       if (count ($array) == 1) {
         $array = Array ($sortKey, "a") ;
       }
@@ -645,8 +645,8 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
       if ( $this->opts ["collapse"] ) {
         // With collapse, only show:
         // - sibling namespaces of the current namespace and it's ancestors
-        $curPathSplit = split (":", trim (getNS($ID), ":")) ;
-        $fqidPathSplit = split (":", trim (getNS($fqid), ":")) ;
+        $curPathSplit = explode(":", trim (getNS($ID), ":")) ;
+        $fqidPathSplit = explode(":", trim (getNS($fqid), ":")) ;
 
         // Find the last parent namespace that matches
         // If there is only one more child namespace in the namespace under evaluation,
@@ -766,7 +766,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
       strpos (substr ($flags, 1), '?') !== FALSE
     ) {
       $this->_showDebugMsg ("parseOptions E") ;
-      $tmp = split ('\?', $flags) ;
+      $tmp = explode('\?', $flags) ;
   
       if (count ($tmp) == 2) {
         $ns    = substr ($tmp [0], 1) ;
@@ -959,7 +959,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
     }
    
     if (! $this->useDefaultTitle) {
-      $name = split (':', $fqid) ;
+      $name = explode(':', $fqid) ;
       $name = ucfirst ($name [count ($name) - 1]) ;
     }
   
