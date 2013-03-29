@@ -227,12 +227,11 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
    * Load the specified plugin (like the tag or discussion plugin)
    */   
   function _loadPlugin ($plugin) {
-     
     if (plugin_isdisabled ($plugin))
       return false ;
-      
+
     $plug = plugin_load ('helper', $plugin) ;
-      
+
     if (! $plug) {
       $this->_showDebugMsg ("Plugin \"$plugin\" NOT loaded!") ;
       return false ;
@@ -252,7 +251,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
     $plug = $this->plugins [$plugin] ;
     
     if (! $plug)
-      return 'Plugin $plugin not loaded!' ;
+      return 'Plugin ' . $plugin . ' not loaded!' ;
         
     $html = $plug->td (cleanID($id)) ;
     
@@ -364,8 +363,8 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
     $this->opts ["ego"] = false ;
     $this->opts ["namespacename"] = false ;
     
-    $flags = explode('\&', $flags) ;
-    
+    $flags = explode('&', $flags) ;
+
     foreach ($flags as $index => $par) {
       $tmp = explode("=", $par) ;
       $key = $tmp [0] ;
@@ -427,7 +426,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
    * Check the supplied column names
    */   
   function _parseColumnNames () {
-  
+
     if (is_array ($this->opts ["cols"])) {
       $this->cols = $this->opts ["cols"] ;
     } else {
@@ -440,7 +439,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
     }
   
     $newCols = Array () ;
-  
+
     foreach ($this->cols as $index => $col) {
       switch ($col) {
       case "page":
@@ -1273,7 +1272,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
     // Get the tags of the current page
     //
     $tmp = $this->_getMeta ($page, "subject") ;
-    
+
     if (! is_array ($tmp))
       return false ;
     
