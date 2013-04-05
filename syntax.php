@@ -340,6 +340,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
             $tmp = explode("=", $par);
             $key = $tmp [0];
             $val = $tmp [1];
+
             switch($key) {
                 case "skip":
                 case "cols":
@@ -347,6 +348,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
                 case "sort":
                 case "tag":
                     $val = explode(';', trim($val, ';'));
+                    $this->_loadPlugin("tag");
                     break;
                 case "noheader":
                 case "nohead":
@@ -1198,27 +1200,19 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * if the given page has one of the specified tags.
      */
     function _hasTag($page) {
-        if(!$this->hasTags)
-            return true;
+        if(!$this->hasTags) return true;
 
         $plug = $this->plugins ['tag'];
+        if(!$plug) return true;
 
-        if(!$plug)
-            return true;
-
-        //
         // Get the tags of the current page
-        //
         $tmp = $this->_getMeta($page, "subject");
 
-        if(!is_array($tmp))
-            return false;
+        if(!is_array($tmp)) return false;
 
         $tags = Array();
 
-        //
         // Convert them to lowercase
-        //
         foreach($tmp as $tag) {
             $tags [] = mb_convert_case($tag, MB_CASE_LOWER, "UTF-8");
         }
@@ -1233,10 +1227,9 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
                 return false;
             }
         }
-        #
+
         # If the intersection with the include tags is not equal (in size) to the
         # array of include tags, we must skip the current document.
-        #
         if(count($this->includeTags) > 0) {
             $intersection = array_intersect($tags, $this->includeTags);
             if(count($intersection) != count($this->includeTags)) {
