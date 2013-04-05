@@ -59,7 +59,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Constructor
      */
     function syntax_plugin_dir() {
-
         global $conf;
 
         //
@@ -118,33 +117,22 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * 3. ~~DIR?...~~
      */
     function connectTo($mode) {
-
-        $this->Lexer->addSpecialPattern(
-            '~~'.DIR_PLUGIN_PATTERN.'~~', $mode, 'plugin_dir'
-        );
-        $this->Lexer->addSpecialPattern(
-            '~~'.DIR_PLUGIN_PATTERN.'[:?][^~]*~~', $mode, 'plugin_dir'
-        );
+        $this->Lexer->addSpecialPattern('~~'.DIR_PLUGIN_PATTERN.'~~', $mode, 'plugin_dir');
+        $this->Lexer->addSpecialPattern('~~'.DIR_PLUGIN_PATTERN.'[:?][^~]*~~', $mode, 'plugin_dir');
     }
 
     /**
      * Handle the match
      */
     function handle($match, $state, $pos, &$handler) {
-
-        return preg_replace(
-            "%~~".DIR_PLUGIN_PATTERN.":(=(.*))?~~%", "\\2",
-            $match
-        );
+        return preg_replace("%~~".DIR_PLUGIN_PATTERN.":(=(.*))?~~%", "\\2", $match);
     }
 
     /**
      * Initialize the current object for each rendering pass
      */
     function _initRender($mode, &$renderer) {
-
-        $rc = FALSE;
-
+        $rc                = FALSE;
         $this->rowNumber   = 0;
         $this->opts        = Array();
         $this->cols        = Array();
@@ -179,14 +167,11 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Create output
      */
     function render($mode, &$renderer, $data) {
-
-        if(!$this->_initRender($mode, $renderer))
-            return false;
+        if(!$this->_initRender($mode, $renderer)) return false;
 
         $rc = $this->_dir($data);
 
-        if($this->modeIsLatex)
-            $this->processedLatex = true;
+        if($this->modeIsLatex) $this->processedLatex = true;
 
         $this->_showDebugMsg("Leaving syntax_plugin_dir.render()");
 
@@ -197,9 +182,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Put a debug message on screen...
      */
     function _showDebugMsg($msg) {
-
-        if(!$this->debug)
-            return;
+        if(!$this->debug) return;
 
         if(is_array($msg)) {
             foreach($msg as $index => $m) {
@@ -246,7 +229,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Let another plugin generate the content...
      */
     function _pluginCell($plugin, $id) {
-
         $plug = $this->plugins [$plugin];
 
         if(!$plug)
@@ -261,9 +243,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Shows parsed options (in debug mode)
      */
     function _parseOptionsShow($data, $dir, $ns) {
-
-        if(!$this->debug)
-            return;
+        if(!$this->debug) return;
 
         $this->_put(DOKU_LF."<xmp style=\"font-family: Courier; color: red;\">");
         $this->_put(DOKU_LF."  data = $data");
@@ -290,13 +270,10 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * (always prefixed and postfixed with a colon, root is ':')
      */
     function _getParentNS($id) {
-
         // global $ID ;
-
         $curNS = getNS($id);
 
-        if($curNS == '')
-            return ':';
+        if($curNS == '') return ':';
 
         if(substr($curNS, 0, 1) != ':') {
             $curNS = ':'.$curNS;
@@ -312,7 +289,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * always ends with a colon.
      */
     function _parseNS($ns, $mustBeNSnoPage) {
-
         global $ID;
 
         if(substr($ns, 0, 2) == '.:') {
@@ -328,8 +304,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
             $ns = ':'.getNS($ID).':'.$ns;
         }
 
-        if($mustBeNSnoPage && substr($ns, -1) <> ':')
-            $ns .= ':';
+        if($mustBeNSnoPage && substr($ns, -1) <> ':') $ns .= ':';
 
         return $ns;
     }
@@ -338,11 +313,9 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Convert namespace to its path
      */
     function _ns2path($ns) {
-
         global $conf;
 
-        if($ns == ':' || $ns == '')
-            return $conf ['datadir'];
+        if($ns == ':' || $ns == '') return $conf ['datadir'];
 
         $ns = trim($ns, ':');
 
@@ -355,7 +328,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Initialize the opts array...
      */
     function _initOpts($flags) {
-
         $this->opts                   = array();
         $this->opts ["noheader"]      = false;
         $this->opts ["collapse"]      = false;
@@ -425,7 +397,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Check the supplied column names
      */
     function _parseColumnNames() {
-
         if(is_array($this->opts ["cols"])) {
             $this->cols = $this->opts ["cols"];
         } else {
@@ -484,7 +455,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Check the supplied tags
      */
     function _parseTags() {
-
         $this->hasTags = false;
 
         if(is_array($this->opts ["tag"])) {
@@ -512,7 +482,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Check the supplied sort keys
      */
     function _parseSortKeys() {
-
         if(is_array($this->opts ["sort"])) {
             $this->sortKeys = $this->opts ["sort"];
         }
@@ -591,9 +560,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * not be skipped...
      */
     function _addFoundPage(&$data, $ns, $id, $type, $level) {
-
         global $ID;
-
         $fqid = $ns.$id; // Fully qualified id...
 
         //
@@ -669,7 +636,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
                 break;
         }
 
-//  $this->_showDebugMsg ("$level $type $ns$id:") ;
+        //  $this->_showDebugMsg ("$level $type $ns$id:");
 
         $data [] = array(
             'id'         => $fqid,
@@ -686,9 +653,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Callback method for the search function in _parseOptions
      */
     function _searchDir(&$data, $base, $file, $type, $level, $opts) {
-
         global $ID;
-
         $ns = $opts ["ns"];
 
         switch($type) {
@@ -724,10 +689,8 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * This assumes that no other colon is put in <flags>
      */
     function _parseOptions($data) {
-
         global $conf;
         global $ID;
-
         $ns    = '.';
         $flags = trim($data, '~');
         $flags = substr($flags, strlen(DIR_PLUGIN_PATTERN));
@@ -864,12 +827,10 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Compare function for usort
      */
     function _sortPage($a, $b) {
-
         return $this->_sortPageByKey($a, $b, 0);
     }
 
     function _sortPageByKey(&$a, &$b, $index) {
-
         if($index >= $this->nbrOfSortKeys)
             return 0;
 
@@ -893,7 +854,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Produces a sortable key
      */
     function _getSortKey(&$page, $keyType) {
-
         switch($keyType) {
             case "page":
                 return html_wikilink($page ["id"]);
@@ -941,7 +901,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Generate the content for the cell with the page link...
      */
     function _tableCellContentID(&$page) {
-
         $fqid        = $page ["id"];
         $tmplvl      = $page ["level"] - 1;
         $spacerWidth = $tmplvl * 20;
@@ -981,7 +940,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Get default value for an unset element
      */
     function _getMeta(&$page, $key1, $key2 = NULL) {
-
         if(!isset ($page ["meta"]))
             $page ["meta"] = p_get_metadata($page ["linkid"], false, true);
 
@@ -998,15 +956,11 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
         //
         // Return "creator" if "contributor" is null
         //
-        if(
-            $key1 == "contributor" &&
-            !isset ($page ["meta"]["contributor"])
-        ) {
+        if($key1 == "contributor" && !isset ($page ["meta"]["contributor"])) {
             $key1 = "creator";
         }
 
-        if(is_string($key2))
-            return $page ["meta"] [$key1] [$key2];
+        if(is_string($key2)) return $page ["meta"] [$key1] [$key2];
 
         return $page ["meta"] [$key1];
     }
@@ -1015,7 +969,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Generate the table cell content...
      */
     function _tableCellContent(&$page, $col) {
-
         switch($col) {
             case "page":
                 $this->_tableCellContentID($page);
@@ -1078,7 +1031,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Rewrite of renderer->table_open () because of class
      */
     function _tableOpen() {
-
         if($this->modeIsLatex) {
             $rdr                    = $this->rdr;
             $rdr->_current_tab_cols = 0;
@@ -1116,7 +1068,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Rewrite of renderer->table_close ()
      */
     function _tableClose() {
-
         if($this->modeIsLatex) {
             $this->rdr->tabular_close();
             return;
@@ -1132,7 +1083,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Rewrite of renderer->tableheader_open () because of class
      */
     function _tableHeaderCellOpen($class) {
-
         if($this->modeIsLatex)
             return;
 
@@ -1143,7 +1093,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Rewrite of renderer->tableheader_close ()
      */
     function _tableHeaderCellClose($index) {
-
         if($this->modeIsLatex) {
             if(($index + 1) == sizeof($this->hdrs)) {
                 $this->rdr->putnl('\\\\');
@@ -1152,7 +1101,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
             }
             return;
         }
-
         return $this->rdr->tableheader_close();
     }
 
@@ -1160,9 +1108,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Rewrite of renderer->tablecell_open () because of class
      */
     function _tableCellOpen($colspan, $class) {
-
-        if($this->modeIsLatex)
-            return;
+        if($this->modeIsLatex) return;
 
         $this->_put(DOKU_LF.DOKU_TAB.DOKU_TAB.'<td class="'.$class.'"');
 
@@ -1176,7 +1122,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Rewrite of renderer->tablecell_close () because of class
      */
     function _tableCellClose($index) {
-
         if($this->modeIsLatex) {
             if(($index + 1) == sizeof($this->hdrs)) {
                 $this->rdr->putnl('\\\\');
@@ -1193,7 +1138,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Return the class name to be used for the <td> showing $col.
      */
     function _getCellClassForCol($col) {
-
         switch($col) {
             case "page":
                 return "dpage";
@@ -1217,7 +1161,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
     }
 
     function _tableHeaderRowOpen() {
-
         if($this->modeIsLatex) {
             $this->_putCmdNl('hline');
             return;
@@ -1227,7 +1170,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
     }
 
     function _tableHeaderRowClose() {
-
         if($this->modeIsLatex) {
             $this->_putCmdNl('hline');
             return;
@@ -1237,7 +1179,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
     }
 
     function _tableRowOpen() {
-
         if($this->modeIsLatex)
             return;
 
@@ -1245,7 +1186,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
     }
 
     function _tableRowClose() {
-
         if($this->modeIsLatex)
             return;
 
@@ -1258,7 +1198,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * if the given page has one of the specified tags.
      */
     function _hasTag($page) {
-
         if(!$this->hasTags)
             return true;
 
@@ -1312,7 +1251,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Generate the actual table content...
      */
     function _tableContent() {
-
         $doWideDesc = $this->opts ["widedesc"];
 
         if(!$this->opts ["noheader"]) {
@@ -1329,8 +1267,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
 
         foreach($this->pages as $page) {
 
-            if(!$this->_hasTag($page))
-                continue;
+            if(!$this->_hasTag($page)) continue;
 
             $this->rowNumber += 1;
 
@@ -1355,7 +1292,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Write data to the output stream
      */
     function _put($data) {
-
         if($data == NULL || $data == '')
             return;
 
@@ -1373,17 +1309,14 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Write a date to the output stream
      */
     function _putDate($date) {
-
         $this->_put(strftime($this->dformat, $date));
     }
 
     function _putCmdNl($cmd) {
-
         $this->rdr->putcmdnl($cmd);
     }
 
     function _putNewLine() {
-
         if($this->modeIsLatex) {
             $this->_putCmdNl('newline');
         } else {
@@ -1395,7 +1328,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Do the real work
      */
     function _dir($data) {
-
         if(!$this->_parseOptions($data))
             return false;
 
