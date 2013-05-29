@@ -729,7 +729,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
             strpos(substr($flags, 1), '?') !== FALSE
         ) {
             $this->_showDebugMsg("parseOptions E");
-            $tmp = explode('\?', $flags);
+            $tmp = explode('?', $flags);
 
             if(count($tmp) == 2) {
                 $ns    = substr($tmp [0], 1);
