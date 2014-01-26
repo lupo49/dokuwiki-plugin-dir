@@ -647,7 +647,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
         
         if($this->ucnames) {
             $fqid =  str_replace('_'," ",$fqid);
-            $fqid = ltrim($fqid , ':');  
+           // $fqid = ltrim($fqid , ':');  
             $fqid = preg_replace_callback(
                 '|:\w|',
                 function ($matches) {
