@@ -15,6 +15,7 @@
  * - Sebastian Menge
  * - Matthias Schulte
  * - Geert Janssens
+ * - Gerry Weißbach
  */
 
 if(!defined('DOKU_INC')) {
@@ -381,7 +382,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
                 case "table":
                     $this->style = "table";
                     break;
-                case "list":
+       so         case "list":
                     $this->style = "list";
                     break;
                 case "namespacename":
@@ -390,7 +391,12 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
                     break;
                 case "debug":
                     $this->debug = true;
-            }
+		            break;
+                case  "last":
+		            $key = 'maxrows';
+		            $val = intval($val);
+		            break;
+		    }
             $this->opts [$key] = $val;
         }
     }
@@ -810,7 +816,10 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
         }
 
         $this->_sortResult();
-
+	    if ( !empty($this->opts['maxrows']) && $this->opts['maxrows'] > 0 ) {
+		    $this->pages = array_slice($this->pages, 0, $this->opts['maxrows']);
+	    }
+	    
         return true;
     }
 
