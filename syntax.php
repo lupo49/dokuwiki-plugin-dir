@@ -382,7 +382,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
                 case "table":
                     $this->style = "table";
                     break;
-       so         case "list":
+                case "list":
                     $this->style = "list";
                     break;
                 case "namespacename":
@@ -391,12 +391,12 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
                     break;
                 case "debug":
                     $this->debug = true;
-		            break;
+		    break;
                 case  "last":
-		            $key = 'maxrows';
-		            $val = intval($val);
-		            break;
-		    }
+		    $key = 'maxrows';
+		    $val = intval($val);
+		    break;
+            }
             $this->opts [$key] = $val;
         }
     }
