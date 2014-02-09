@@ -26,6 +26,7 @@ if(!defined('DOKU_PLUGIN')) {
 
 require_once (DOKU_PLUGIN.'syntax.php');
 require_once (DOKU_INC.'inc/search.php');
+require_once (DOKU_INC.'inc/pageutils.php');
 
 define ("DIR_PLUGIN_PATTERN", "DIR");
 
@@ -319,7 +320,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
 
         $ns = trim($ns, ':');
 
-        $path = $conf ['datadir'].'/'.str_replace(':', '/', $ns);
+        $path = $conf ['datadir'].'/'.utf8_encodeFN(str_replace(':', '/', $ns));
 
         return $path;
     }
