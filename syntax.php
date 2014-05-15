@@ -612,7 +612,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
                 }
 
                 // Don't add startpages the user isn't authorized to read
-                if(auth_quickaclcheck(substr($linkid, 1)) < AUTH_READ)
+                if(auth_quickaclcheck(substr($fqid,1) < AUTH_READ)
                     return false;
 
                 if($this->opts ["collapse"]) {
@@ -684,7 +684,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
                     return false;
                 //check ACL
                 $id = pathID($file);
-                if(auth_quickaclcheck($id) < AUTH_READ)
+                if(auth_quickaclcheck(substr($ns.$id,1,-1)) < AUTH_READ)
                     return false;
                 $this->_addFoundPage($data, $ns, $id, $type, $level);
         }
