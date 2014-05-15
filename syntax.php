@@ -15,6 +15,7 @@
  * - Sebastian Menge
  * - Matthias Schulte
  * - Geert Janssens
+ * - Markus Gschwendt
  */
 
 if(!defined('DOKU_INC')) {
@@ -333,6 +334,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
         $this->opts                   = array();
         $this->opts ["noheader"]      = false;
         $this->opts ["collapse"]      = false;
+        $this->opts ["collapse_sub"]  = false;
         $this->opts ["ego"]           = false;
         $this->opts ["namespacename"] = false;
 
@@ -365,6 +367,10 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
                     break;
                 case "collapse":
                     $key = "collapse";
+                    $val = true;
+                    break;
+                case "collapse_sub":
+                    $key = "collapse_sub";
                     $val = true;
                     break;
                 case "ego":
@@ -600,6 +606,13 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
                         return false;
                     }
                 }
+                if($this->opts ["collapse_sub"]) {
+                    // With collapse, only show:
+                    // - pages within the same namespace as the current page
+                    if($this->_getParentNS($fqid) != getNS($ID) && $id != "start") {
+                        return false;
+                    }
+                }
                 $linkid = $fqid;
                 break;
             case "d":
@@ -612,7 +625,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
                 }
 
                 // Don't add startpages the user isn't authorized to read
-                if(auth_quickaclcheck(substr($fqid,1) < AUTH_READ)
+                if(auth_quickaclcheck(substr($linkid, 1)) < AUTH_READ)
                     return false;
 
                 if($this->opts ["collapse"]) {
@@ -638,6 +651,16 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
                     if(count($fqidPathSplit) > $clevel + 1) {
                         return false;
                     }
+                }
+                if($this->opts ["collapse_sub"]) {
+                    // With collapse_sub, only show:
+                    // - start pages of the first subnamespace
+                    $curPathSplit  = explode(":", trim(getNS($ID), ":"));
+                    $fqidPathSplit = explode(":", trim(getNS($fqid), ":"));
+                    if($this->_getParentNS($fqid) != getNS($ID) && (count($curPathSplit)+2)<count($fqidPathSplit)) {
+                        return false;
+                    }
+
                 }
 
                 $linkid = $fqid.$this->start;
@@ -684,7 +707,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
                     return false;
                 //check ACL
                 $id = pathID($file);
-                if(auth_quickaclcheck(substr($ns.$id,1,-1)) < AUTH_READ)
+                if(auth_quickaclcheck($id) < AUTH_READ)
                     return false;
                 $this->_addFoundPage($data, $ns, $id, $type, $level);
         }
