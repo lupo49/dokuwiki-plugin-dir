@@ -576,7 +576,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
     function _addFoundPage(&$data, $ns, $id, $type, $level) {
         global $ID;
         $fqid = $ns.$id; // Fully qualified id...
-        $nsSplit  = explode(":", trim($ns, ":"));
+        $nsPathSplit  = explode(":", trim($ns, ":"));
         $curPathSplit  = explode(":", trim(getNS($ID), ":"));
         $fqidPathSplit = explode(":", trim(getNS($fqid), ":"));
 
@@ -586,7 +586,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
         //
         switch($type) {
             case "f":
-                if($fqid == ':'.$ID && !$this->opts ["ego"] && $nsSplit == $curPathSplit) // If we found ourself, skip it
+                if($fqid == ':'.$ID && !$this->opts ["ego"] && $nsPathSplit == $curPathSplit) // If we found ourself, skip it
                     return false;
                 $pageName = noNS($id);
                 if($pageName == $this->start)
@@ -637,9 +637,9 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
                 // With collapse_sub, only show:
                 // - start pages of the first subnamespace
                 if($this->opts ["collapse"] || $this->opts ["collapse_sub"]) {
-                    if($this->opts ["collapse"]) $collapselevel = 2;
-                    if($this->opts ["collapse_sub"]) $collapselevel = 3;
-                    if($this->opts ["collapse"] && $this->opts ["collapse_sub"]) $collapselevel = 3;
+                    if($this->opts ["collapse"]) $collapselevel = 0;
+                    if($this->opts ["collapse_sub"]) $collapselevel = 1;
+                    if($this->opts ["collapse"] && $this->opts ["collapse_sub"]) $collapselevel = 1;
                     if(count($nsPathSplit) + $collapselevel < count($fqidPathSplit)) {
                         return false;
                     }
