@@ -607,12 +607,12 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
                 if($this->opts ["collapse"]) {
                     // With collapse, only show:
                     // - pages within the same namespace as the current page
-                    if($this->_getParentNS($fqid) == $this->_getParentNS($ID)) {
+                    if($this->_getParentNS($fqid) == $ns) {
                         $keeppage = true;
                     }
                 }
                 if($this->opts ["collapse_sub"] && !$this->opts ["ego"]) {
-                    if($this->_getParentNS($fqid) == getNS($ID) && $id == "start") {
+                    if($this->_getParentNS($fqid) == $ns && $id == "start") {
                         $keeppage = true;
                     }
                 }
