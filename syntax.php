@@ -576,13 +576,17 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
     function _addFoundPage(&$data, $ns, $id, $type, $level) {
         global $ID;
         $fqid = $ns.$id; // Fully qualified id...
+        $nsSplit  = explode(":", trim($ns, ":"));
+        $curPathSplit  = explode(":", trim(getNS($ID), ":"));
+        $fqidPathSplit = explode(":", trim(getNS($fqid), ":"));
+
 
         //
         // If this file or directory should be skipped, do so
         //
         switch($type) {
             case "f":
-                if(($fqid == ':'.$ID) && !$this->opts ["ego"]) // If we found ourself, skip it
+                if($fqid == ':'.$ID && !$this->opts ["ego"] && $nsSplit == $curPathSplit) // If we found ourself, skip it
                     return false;
                 $pageName = noNS($id);
                 if($pageName == $this->start)
@@ -599,20 +603,22 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
                         }
                     }
                 }
+		$keeppage = false;
                 if($this->opts ["collapse"]) {
                     // With collapse, only show:
                     // - pages within the same namespace as the current page
-                    if($this->_getParentNS($fqid) != $this->_getParentNS($ID)) {
-                        return false;
+                    if($this->_getParentNS($fqid) == $this->_getParentNS($ID)) {
+                        $keeppage = true;
                     }
                 }
-                if($this->opts ["collapse_sub"]) {
-                    // With collapse, only show:
-                    // - pages within the same namespace as the current page
-                    if($this->_getParentNS($fqid) != getNS($ID) && $id != "start") {
-                        return false;
+                if($this->opts ["collapse_sub"] && !$this->opts ["ego"]) {
+                    if($this->_getParentNS($fqid) == getNS($ID) && $id == "start") {
+                        $keeppage = true;
                     }
                 }
+
+                if(!$keeppage) return false;
+
                 $linkid = $fqid;
                 break;
             case "d":
@@ -628,36 +634,13 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
                 if(auth_quickaclcheck(substr($linkid, 1)) < AUTH_READ)
                     return false;
 
-                if($this->opts ["collapse"]) {
-                    // With collapse, only show:
-                    // - sibling namespaces of the current namespace and it's ancestors
-                    $curPathSplit  = explode(":", trim(getNS($ID), ":"));
-                    $fqidPathSplit = explode(":", trim(getNS($fqid), ":"));
-
-                    // Find the last parent namespace that matches
-                    // If there is only one more child namespace in the namespace under evaluation,
-                    // Then this is a sibling of one of the parent namespaces of the current page.
-                    // Siblings are ok, grandchild namespaces and below should be skipped (for collapse).
-                    $clevel = 0;
-                    if(count($curPathSplit) > 0) {
-                        while(($clevel < count($fqidPathSplit) - 1) && ($clevel < count($curPathSplit))) {
-                            if($curPathSplit[$clevel] == $fqidPathSplit[$clevel]) {
-                                $clevel++;
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                    if(count($fqidPathSplit) > $clevel + 1) {
-                        return false;
-                    }
-                }
-                if($this->opts ["collapse_sub"]) {
-                    // With collapse_sub, only show:
-                    // - start pages of the first subnamespace
-                    $curPathSplit  = explode(":", trim(getNS($ID), ":"));
-                    $fqidPathSplit = explode(":", trim(getNS($fqid), ":"));
-                    if($this->_getParentNS($fqid) != getNS($ID) && (count($curPathSplit)+2)<count($fqidPathSplit)) {
+                // With collapse_sub, only show:
+                // - start pages of the first subnamespace
+                if($this->opts ["collapse"] || $this->opts ["collapse_sub"]) {
+                    if($this->opts ["collapse"]) $collapselevel = 2;
+                    if($this->opts ["collapse_sub"]) $collapselevel = 3;
+                    if($this->opts ["collapse"] && $this->opts ["collapse_sub"]) $collapselevel = 3;
+                    if(count($nsPathSplit) + $collapselevel < count($fqidPathSplit)) {
                         return false;
                     }
 
