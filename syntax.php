@@ -604,7 +604,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
                     }
                 }
 
-               unset($keep_page); var_dump($keep_page);
+               unset($keep_page);
                 if($this->opts ["collapse"]) {
                     $keep_page = false;
                     // With collapse, only show:
