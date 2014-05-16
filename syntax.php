@@ -603,21 +603,23 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
                         }
                     }
                 }
-		$keeppage = false;
+
+               unset($keep_page); var_dump($keep_page);
                 if($this->opts ["collapse"]) {
+                    $keep_page = false;
                     // With collapse, only show:
                     // - pages within the same namespace as the current page
                     if($this->_getParentNS($fqid) == $ns) {
-                        $keeppage = true;
+                        $keep_page = true;
                     }
                 }
-                if($this->opts ["collapse_sub"] && !$this->opts ["ego"]) {
-                    if($this->_getParentNS($fqid) == $ns && $id == "start") {
-                        $keeppage = true;
+                if($this->opts ["collapse_sub"]) {
+                    $keep_page = false;
+                    if(($this->_getParentNS($fqid) == $ns && $id == "start") || $this->opts ["collapse"]) {
+                        $keep_page = true;
                     }
                 }
-
-                if(!$keeppage) return false;
+                if(isset($keep_page) && !$keep_page) { unset($keep_page); return false; }
 
                 $linkid = $fqid;
                 break;
