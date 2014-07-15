@@ -76,3 +76,9 @@ div.dokuwiki td.rowno {
   text-align: right ;
   width: 5px ;
 }
+
+/* color for directory names in ucnames option */
+div.dokuwiki td.dpage a.wikilink {
+/* color: __extern__; */ /* pre-dokuwiki default template */
+  color: __link__;  /*dokuwiki template */
+}

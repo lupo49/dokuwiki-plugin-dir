@@ -2,7 +2,7 @@
 base   dir
 author Jacobus Geluk
 email  Jacobus.Geluk@gmail.com
-date   2011-02-16
+date   2014-07-15
 name   dir
 desc   Show content of current namespace, including sub namespaces and/or parent/sibling namespaces, in a table or list.
 url    http://www.dokuwiki.org/plugin:dir
