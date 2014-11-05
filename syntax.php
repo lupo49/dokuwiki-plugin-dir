@@ -1065,10 +1065,9 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
      * Rewrite of renderer->table_open () because of class
      */
     function _tableOpen() {
-        $rdr = $this->rdr;
-        $rdr->_counter['row_counter'] = 0;
-        
         if($this->modeIsLatex) {
+            $rdr = $this->rdr;
+            $rdr->_counter['row_counter'] = 0;
             $rdr->_current_tab_cols = 0;
             if($rdr->info ['usetablefigure'] == "on") {
                 $this->_putCmdNl("begin{figure}[h]");
