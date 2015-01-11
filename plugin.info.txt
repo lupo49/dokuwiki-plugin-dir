@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # General Plugin Info do not edit
 base   dir
 author Jacobus Geluk
