@@ -1063,7 +1063,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
 
     /**
      * Rewrite of renderer->table_open () because of class
-_showDebugMsg(     */
+     */
     function _tableOpen() {
         if($this->modeIsLatex) {
             $rdr = $this->rdr;
