@@ -1,7 +1,7 @@
 # General Plugin Info do not edit
 base   dir
-author Jacobus Geluk
-email  Jacobus.Geluk@gmail.com
+author Jacobus Geluk, Matthias Schulte
+email  dokuwiki@lupo49.de
 date   2014-07-15
 name   dir
 desc   Show content of current namespace, including sub namespaces and/or parent/sibling namespaces, in a table or list.
