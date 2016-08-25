@@ -1098,7 +1098,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
                 $class = "pagelist";
         }
         $this->_showDebugMsg("Style=".$this->style." table class=$class");
-        $this->_put(DOKU_LF.'<table class="'.$class.'">'.DOKU_LF);
+        $this->rdr->table_open () ;
     }
 
     /**
@@ -1110,10 +1110,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
             return;
         }
 
-        $this->_put(DOKU_LF.'</table>'.DOKU_LF);
-
-        // Removed table_close() because it add's a </div> too much
-        // $this->rdr->table_close () ;
+        $this->rdr->table_close () ;
     }
 
     /**
