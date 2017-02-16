@@ -636,10 +636,6 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
                     }
                 }
 
-                // Don't add startpages the user isn't authorized to read
-                if(auth_quickaclcheck(substr($fqid, 1)) < AUTH_READ)
-                    return false;
-
                 // With collapse_sub, only show:
                 // - start pages of the first subnamespace
                 if($this->opts ["collapse"] || $this->opts ["collapse_sub"]) {
@@ -653,7 +649,11 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
 
                 $linkid = $fqid.$this->start;
                 break;
-        }
+	}
+        // Don't add pages the user isn't authorized to read
+        if(auth_quickaclcheck(substr($fqid, 1)) < AUTH_READ)
+        return false;
+	
 
         //  $this->_showDebugMsg ("$level $type $ns$id:");
         
