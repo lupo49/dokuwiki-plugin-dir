@@ -1098,7 +1098,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
                 $class = "pagelist";
         }
         $this->_showDebugMsg("Style=".$this->style." table class=$class");
-        $this->rdr->table_open () ;
+        $this->rdr->table_open (null, null, null, $class) ;
     }
 
     /**
