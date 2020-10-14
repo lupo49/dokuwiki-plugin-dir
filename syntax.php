@@ -456,7 +456,7 @@ class syntax_plugin_dir extends DokuWiki_Syntax_Plugin {
             }
         }
         $this->cols = $newCols;
-        if(count($this->opts ["hdrs"]) != count($this->cols)) {
+        if(isset($this->opts["hdrs"]) && count($this->opts["hdrs"]) != count($this->cols)) {
             $this->_showDebugMsg(
                 "The number of specified headers (".count($this->opts ["hdrs"]).
                     ") is not equal to the number of specified columns (".
